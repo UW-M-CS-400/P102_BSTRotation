@@ -118,20 +118,22 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
     }
 
     public static void main(String[] args) {
-        System.out.println(BinarySearchTree.test1() ? "Test 1 passed" : "Test 1 failed");
-        System.out.println(BinarySearchTree.test2() ? "Test 2 passed" : "Test 2 failed");
-        System.out.println(BinarySearchTree.test3() ? "Test 3 passed" : "Test 3 failed");
+        BinarySearchTree tree = new BinarySearchTree<>();
+
+        System.out.println(tree.test1() ? "Test 1 passed" : "Test 1 failed");
+        System.out.println(tree.test2() ? "Test 2 passed" : "Test 2 failed");
+        System.out.println(tree.test3() ? "Test 3 passed" : "Test 3 failed");
     }
 
-    protected static boolean test1() {
+    protected boolean test1() {
         return false;
     }
 
-    protected static boolean test2() {
+    protected boolean test2() {
         return false;
     }
 
-    protected static boolean test3() {
+    protected boolean test3() {
         return false;
     }
 }
