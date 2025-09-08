@@ -127,6 +127,8 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
     //This test creates 100 integer trees with a random number of right and left nodes, and inserts them in a random sequence
     //This test also verifies that the size of the trees are correct both before and after clearing
     public boolean test1() {
+        BinarySearchTree<Integer> intTree = new BinarySearchTree();
+
         //Keeps track of success across all trees at passing contains, size, and clear checks
         boolean successful = true;
 
@@ -160,11 +162,11 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
                 }
 
                 //Insert lastNum
-                this.insert((T) lastNum);
-                //Updates success by checking that lastNum is in the tree
-                successful = successful && this.contains((T) lastNum);
+                intTree.insert(lastNum);
                 //If, for this tree, lastNum is not in the tree, print what number failed
-                if(!this.contains((T) lastNum)) {
+                if(!intTree.contains(lastNum)) {
+                    //Since lastNum wasn't in the tree, the test didn't pass
+                    successful = false;
                     System.out.println("Contains check failed for: " + lastNum);
                 }
 
@@ -182,9 +184,9 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
             //If we run out of right children, insert the rest of the left children
             while(leftCounter++ < left) {
                 lastNum -= (int) (Math.random() * 10d);
-                this.insert((T) lastNum);
-                successful = successful && this.contains((T) lastNum);
-                if(!this.contains((T) lastNum)) {
+                intTree.insert(lastNum);
+                if(!intTree.contains(lastNum)) {
+                    successful = false;
                     System.out.println("Contains check failed for: " + lastNum);
                 }
             }
@@ -192,21 +194,21 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
             //If we run out of left children, insert the rest of the right children
             while(rightCounter++ < right) {
                 lastNum += (int) (Math.random() * 10d);
-                this.insert((T) lastNum);
-                successful = successful && this.contains((T) lastNum);
-                if(!this.contains((T) lastNum)) {
+                intTree.insert(lastNum);
+                if(!intTree.contains(lastNum)) {
+                    successful = false;
                     System.out.println("Contains check failed for: " + lastNum);
                 }
             }
 
             //Update our success by checking if the tree's supposed size and actual size match
-            successful = successful && supposedSize == this.size();
+            successful = successful && supposedSize == intTree.size();
             //Print, for this tree, whether it's size check as successful
             //System.out.println(supposedSize == this.size() ? "This tree is the correct size" : "This tree is the wrong size");
 
             //Clear the tree and update our success by making sure its size is 0
-            this.clear();
-            successful = successful && this.size() == 0;
+            intTree.clear();
+            successful = successful && intTree.size() == 0;
             //Print, for this tree, if it was successfully cleared
             //System.out.println(this.size() == 0 ? "The tree was successfully cleared": "The tree failed to clear"); 
         }
@@ -214,8 +216,61 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
         return successful;
     }
 
+    //Creates 100 String trees filled with random strings, and checks to make sure they are all added, and that the resulting tree is the correct size
+    //This test also verifies contains() on interiors by randomly adding strings to a list to check at the end
     public boolean test2() {
-        return false;
+        BinarySearchTree<String> stringTree = new BinarySearchTree();
+        //The list of randomly selected strings to check
+        ArrayList<String> stringsToCheck = new ArrayList();
+
+        boolean successful = true;
+
+        for(int i = 0; i < 100; ++i) {
+            //The number of strings to add to this tree
+            int numStrings = (int) (Math.random() * 200d);
+
+            for(int j = 0; j < numStrings; ++j) {
+                //Generate a random length for the string
+                int length = (int) (Math.random() * 50d);
+                //The string which we will be inserting
+                String insertString = "";
+
+                for(int k = 0; k < length; ++k) {
+                    //Randomly adds characters to the string
+                    insertString += new Character((int) (Math.random() * 128d));
+                }
+
+                //Insert the string into the tree and check if it was successfully inserted
+                stringTree.insert(insertString);
+                if(!stringTree.contains(insertString)) {
+                    successful = false;
+                    System.out.println("Contains check failed for: " + insertString);
+                }
+
+                //25% chance for the string to randomly be selected to be checked for containment later
+                if(Math.random() < 0.25d) {
+                    stringsToCheck.add(insertString);
+                }
+            }
+
+            successful = successful && stringTree.size() == numStrings;
+
+            //Go through and check all the randomly selected strings to ensure they're still in the tree
+            for(int j = 0; j < stringsToCheck.size(); ++j) {
+                if(!stringTree.contains(stringsToCheck.get(j))) {
+                    successful = false;
+                    System.out.println("Contains check failed for: " + stringsToCheck.get(j));
+                }
+            }
+
+            //Clear the tree and list for checking
+            stringTree.clear();
+            stringsToCheck.clear();
+
+            successful = successful && stringTree.size() == 0;
+        }
+
+        return successful;
     }
 
     public boolean test3() {
