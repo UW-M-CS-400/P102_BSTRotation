@@ -130,10 +130,6 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
         //Keeps track of success across all trees at passing contains, size, and clear checks
         boolean successful = true;
 
-        //Creates a backup access to the old root and clears the tree for testing
-        BinaryNode<T> clonedRoot = this.root;
-        this.clear();
-
         for(int i = 0; i < 100; ++i) {
             //Get how many left/right children we'll have, and create counters to keep track of how many we insert into the tree
             int left = (int) (Math.random() * 100d);
@@ -214,9 +210,6 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
             //Print, for this tree, if it was successfully cleared
             //System.out.println(this.size() == 0 ? "The tree was successfully cleared": "The tree failed to clear"); 
         }
-
-        //Restores the original tree by putting back the old root
-        this.root = clonedRoot;
 
         return successful;
     }
