@@ -125,8 +125,94 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
         System.out.println(tree.test3() ? "Test 3 passed" : "Test 3 failed");
     }
 
+    //This test creates 100 integer trees with a random number of right and left nodes, and inserts them in a random sequence
+    //This test also verifies that the size of the trees are correct both before and after clearing
     protected boolean test1() {
-        return false;
+        //Keeps track of success across all trees at passing contains, size, and clear checks
+        boolean successful = true;
+
+        for(int i = 0; i < 100; ++i) {
+            //Get how many left/right children we'll have, and create counters to keep track of how many we insert into the tree
+            int left = (int) (Math.random() * 100d);
+            int right = (int) (Math.random() * 100d);
+            int leftCounter = 0;
+            int rightCounter = 0;
+            //Get the number of left children to insert before switching to right children
+            int numToInsert = (int) (Math.random() * 10d);
+            int insertCounter = 0;
+            //Start with inserting left children
+            boolean leftInsert = true;
+            //Since for left children the number to insert = lastNum - 5, on average, we do that times the number of left children we're inserting
+            int lastNum = numToInsert * 5;
+
+            //What the size of our tree should be after we finish inserting everything
+            int supposedSize = left + right;
+
+            //While I have both left and right children to insert
+            while(leftCounter < left && rightCounter < right) {
+                //If inserting left, decrease lastNum and increment my left counter
+                if(leftInsert) {
+                    lastNum -= (int) (Math.random() * 10d);
+                    ++leftCounter;
+                } else {
+                    //If inserting right, increase lastNum and increment my rightCounter
+                    lastNum += (int) (Math.random() * 10d);
+                    ++rightCounter;
+                }
+
+                //Insert lastNum
+                this.insert(lastNum);
+                //Updates success by checking that lastNum is in the tree
+                success = success && this.contains(lastNum);
+                //If, for this tree, lastNum is not in the tree, print what number failed
+                if(!this.contains(lastNum)) {
+                    System.out.println("Contains check failed for: " + lastNum);
+                }
+
+                //Increment the insert counter and check if we've reached the number to insert
+                if(++insertCounter == numToInsert) {
+                    //Flip whether we're inserting left/right children
+                    leftInsert = !leftInsert;
+                    //Reset the insert counter
+                    insertCounter = 0;
+                    //Get a new random number to insert
+                    numToInsert = (int) (Math.random() * 10d);
+                }
+            }
+
+            //If we run out of right children, insert the rest of the left children
+            while(leftCounter++ < left) {
+                lastNum -= (int) (Math.random() * 10d);
+                this.insert(lastNum);
+                success = success && this.contains(lastNum);
+                if(!this.contains(lastNum)) {
+                    System.out.println("Contains check failed for: " + lastNum);
+                }
+            }
+
+            //If we run out of left children, insert the rest of the right children
+            while(rightCounter++ < right) {
+                lastNum += (int) (Math.random() * 10d);
+                this.insert(lastNum);
+                success = success && this.contains(lastNum);
+                if(!this.contains(lastNum)) {
+                    System.out.println("Contains check failed for: " + lastNum);
+                }
+            }
+
+            //Update our success by checking if the tree's supposed size and actual size match
+            successful = successful && supposedSize == this.size();
+            //Print, for this tree, whether it's size check as successful
+            System.out.println(supposedSize == this.size() ? "This tree is the correct size" : "This tree is the wrong size");
+
+            //Clear the tree and update our success by making sure its size is 0
+            this.clear();
+            successful = successful && this.size() == 0;
+            //Print, for this tree, if it was successfully cleared
+            System.out.println(this.size() == 0 ? "The tree was successfully cleared": "The tree failed to clear"); 
+        }
+
+        return successful;
     }
 
     protected boolean test2() {
