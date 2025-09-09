@@ -114,7 +114,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
 
     @Override
     public void clear() {
-        //Can just set root to null to effectively reset the tree, garbage collect takes care of the other nodes
+        //Can just set root to null to effectively reset the tree, garbage collector takes care of the other nodes
         root = null;
     }
 
@@ -275,7 +275,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
         return successful;
     }
 
-    //test1 but for Floats
+    //test1 but for floats
     public boolean test3() {
         BinarySearchTree<Float> floatTree = new BinarySearchTree<>();
 
