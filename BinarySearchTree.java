@@ -118,6 +118,21 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
         root = null;
     }
 
+    protected void printPreOrder() {
+        printPreOrderHelper(root);
+        System.out.println();
+    }
+
+    protected void printPreOrderHelper(BinaryNode<T> subtree) {
+        if(subtree == null) {
+            return;
+        }
+
+        printPreOrderHelper(subtree.getLeft());
+        System.out.print(subtree.getData() + ", ");
+        printPreOrderHelper(subtree.getRight());
+    }
+
     public static void main(String[] args) {
         BinarySearchTree tree = new BinarySearchTree<>();
 
@@ -203,6 +218,11 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
                 }
             }
 
+            //Used for testing tree structure validity
+            /*if(i < 3) {
+                intTree.printPreOrder();
+            }*/
+
             //Update our success by checking if the tree's supposed size and actual size match
             successful = successful && supposedSize == intTree.size();
             //Print, for this tree, whether it's size check as successful
@@ -239,7 +259,15 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
 
                 for(int k = 0; k < length; ++k) {
                     //Randomly adds characters to the string
-                    insertString += (char) (Math.random() * 128d);
+                    //Multiply by 95 instead of 96 to prevent DEL being added to string
+                    char insertChar = (char) (Math.random() * 95d + 32d);
+
+                    //Prevents comma being added to string (makes debugging with preOrder easier)
+                    /*while(insertChar == 44) {
+                        insertChar = (char) (Math.random() * 95d + 32d);
+                    }*/
+
+                    insertString += insertChar;
                 }
 
                 //Insert the string into the tree and check if it was successfully inserted
@@ -264,6 +292,11 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
                     System.out.println("Contains check failed for: " + stringsToCheck.get(j));
                 }
             }
+
+            //Used for testing tree structure validity
+            /*if(i < 1) {
+                stringTree.printPreOrder();
+            }*/
 
             //Clear the tree and list for checking
             stringTree.clear();
@@ -350,6 +383,11 @@ public class BinarySearchTree<T extends Comparable<T>> implements SortedCollecti
                     System.out.println("Contains check failed for: " + lastNum);
                 }
             }
+
+            //Used for testing tree structure validity
+            /*if(i < 3) {
+                floatTree.printPreOrder();
+            }*/
 
             //Update our success by checking if the tree's supposed size and actual size match
             successful = successful && supposedSize == floatTree.size();
